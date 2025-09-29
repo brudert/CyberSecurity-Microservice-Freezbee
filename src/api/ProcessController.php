@@ -14,7 +14,7 @@ use Symfony\Component\Uid\Uuid;
 
 class ProcessController extends AbstractController {
 
-    #[Route("/process/{processId}", methods: ["PUT"])]
+    #[Route("/api/process/{processId}", methods: ["PUT"])]
     public function modifyProcess(Request $request, EntityManagerInterface $entityManager, string $processId): Response {
         /** @var ProcessRepository $processRepository  */
         $processRepository = $entityManager->getRepository(Process::class);
@@ -38,7 +38,7 @@ class ProcessController extends AbstractController {
         return new JsonResponse($res);
     }
 
-    #[Route("/process/validate/{processId}", methods: ["PUT"])]
+    #[Route("/api/process/validate/{processId}", methods: ["PUT"])]
     public function validateProcess(Request $request, EntityManagerInterface $entityManager, string $processId): Response {
         /** @var ProcessRepository $processRepository  */
         $processRepository = $entityManager->getRepository(Process::class);
@@ -51,7 +51,7 @@ class ProcessController extends AbstractController {
         return new JsonResponse($res);
     }
 
-    #[Route("/process", methods: ["POST"])]
+    #[Route("/api/process", methods: ["POST"])]
     public function createProcess(Request $request, EntityManagerInterface $entityManager, string $processId): Response {
         /** @var ProcessRepository $processRepository  */
         $processRepository = $entityManager->getRepository(Process::class);
@@ -76,7 +76,7 @@ class ProcessController extends AbstractController {
         return new JsonResponse($res);
     }
 
-    #[Route("/process/{processId}", methods: ["DELETE"])]
+    #[Route("/api/process/{processId}", methods: ["DELETE"])]
     public function deleteProcess(Request $request, EntityManagerInterface $entityManager, string $processId): Response {
         
         $processRepository = $entityManager->getRepository(Process::class);
@@ -87,7 +87,7 @@ class ProcessController extends AbstractController {
         return new JsonResponse($res);
     }
 
-    #[Route("/process/{processId}", methods: ["get"])]
+    #[Route("/api/process/{processId}", methods: ["GET"])]
     public function getProcess(Request $request, EntityManagerInterface $entityManager, string $processId): Response {
         
         $processRepository = $entityManager->getRepository(Process::class);
