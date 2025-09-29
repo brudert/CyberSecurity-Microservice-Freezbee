@@ -10,7 +10,7 @@ use Symfony\Bridge\Doctrine\Types\UuidType;
 use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity(repositoryClass: CharacteristicRepository::class)]
-class Characteristic
+class Characteristic implements JsonSerializable
 {
     #[ORM\Id]
     #[ORM\Column(type: UuidType::NAME, unique: true)]
@@ -59,5 +59,12 @@ class Characteristic
     //     $this->name = $name;
     //     $this->description = $desc;
     // }
+
+    public function jsonSerialize(): array {
+        return [
+            "name" => $this->name,
+            "description" => $this->description
+        ];
+    }
 
 }
