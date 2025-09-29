@@ -34,7 +34,7 @@ class ProcessController extends AbstractController {
         }
         
         $entityManager->flush();
-        
+
         return new JsonResponse($res);
     }
 
@@ -46,6 +46,29 @@ class ProcessController extends AbstractController {
 
         $res->setTestsValidated();
 
+        $entityManager->flush();
+        
+        return new JsonResponse($res);
+    }
+
+    #[Route("/process", methods: ["POST"])]
+    public function createProcess(Request $request, EntityManagerInterface $entityManager, string $processId): Response {
+        /** @var ProcessRepository $processRepository  */
+        $processRepository = $entityManager->getRepository(Process::class);
+
+        
+        $payload = json_decode($request->getContent(), true);
+
+        if(!isset($payload["name"]) || !isset($payload["description"]) || !isset($payload["tests"])) {
+            return new JsonResponse("Invalid input", 400);
+        }
+
+        $res = new Process;
+
+        $res->setName($payload["name"]);
+        $res->setDescription($payload["description"]); 
+        $res->setTests($payload["tests"]); 
+        
         $entityManager->flush();
         
         return new JsonResponse($res);
