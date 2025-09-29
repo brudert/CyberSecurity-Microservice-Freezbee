@@ -2,7 +2,7 @@
 
 namespace App\Model\Entity;
 
-use App\Model\Repository\CharacteristicRepository;
+use App\Infrastructure\Repository\CharacteristicRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Types\UuidType;

@@ -1,40 +1,40 @@
 <?php
 
-namespace App\Model\Repository;
+namespace App\Infrastructure\Repository;
 
-use App\Model\Entity\Series;
+use App\Model\Entity\Dosage;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<Series>
+ * @extends ServiceEntityRepository<Dosage>
  */
-class SeriesRepository extends ServiceEntityRepository
+class DosageRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Series::class);
+        parent::__construct($registry, Dosage::class);
     }
 
 //    /**
-//     * @return Series[] Returns an array of Series objects
+//     * @return Dosage[] Returns an array of Dosage objects
 //     */
 //    public function findByExampleField($value): array
 //    {
-//        return $this->createQueryBuilder('s')
-//            ->andWhere('s.exampleField = :val')
+//        return $this->createQueryBuilder('d')
+//            ->andWhere('d.exampleField = :val')
 //            ->setParameter('val', $value)
-//            ->orderBy('s.id', 'ASC')
+//            ->orderBy('d.id', 'ASC')
 //            ->setMaxResults(10)
 //            ->getQuery()
 //            ->getResult()
 //        ;
 //    }
 
-//    public function findOneBySomeField($value): ?Series
+//    public function findOneBySomeField($value): ?Dosage
 //    {
-//        return $this->createQueryBuilder('s')
-//            ->andWhere('s.exampleField = :val')
+//        return $this->createQueryBuilder('d')
+//            ->andWhere('d.exampleField = :val')
 //            ->setParameter('val', $value)
 //            ->getQuery()
 //            ->getOneOrNullResult()

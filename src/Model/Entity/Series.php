@@ -2,7 +2,7 @@
 
 namespace App\Model\Entity;
 
-use App\Model\Repository\SeriesRepository;
+use App\Infrastructure\Repository\SeriesRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Types\UuidType;
 use Symfony\Component\Uid\Uuid;

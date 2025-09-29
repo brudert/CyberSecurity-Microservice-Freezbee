@@ -2,7 +2,7 @@
 
 namespace App\Model\Entity;
 
-use App\Model\Repository\DosageRepository;
+use App\Infrastructure\Repository\DosageRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: DosageRepository::class)]
