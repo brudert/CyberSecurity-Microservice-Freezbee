@@ -17,12 +17,11 @@ class CharacteristicRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return Characteristic Returns an array of Characteristic objects
+     * @return Characteristic Returns a Characteristic objects
      */
     public function findByID($value): Characteristic
     {
-        return $this->find($value)
-        ;
+        return $this->find($value);
     }
 
 //    public function findOneBySomeField($value): ?Characteristic

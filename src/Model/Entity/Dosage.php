@@ -64,4 +64,11 @@ class Dosage
 
         return $this;
     }
+
+    public function jsonSerialize(): array {
+        return [
+            "dosage" => $this->grams,
+            "ingredient" => $this->ingredient
+        ];
+    }
 }

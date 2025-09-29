@@ -5,11 +5,12 @@ namespace App\Model\Entity;
 use App\Infrastructure\Repository\ProcessRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use JsonSerializable;
 use Symfony\Bridge\Doctrine\Types\UuidType;
 use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity(repositoryClass: ProcessRepository::class)]
-class Process
+class Process implements JsonSerializable
 {
     #[ORM\Id]
     #[ORM\Column(type: UuidType::NAME, unique: true)]
@@ -79,9 +80,9 @@ class Process
         return $this->testsValidated;
     }
 
-    public function setTestsValidated(bool $testsValidated): static
+    public function setTestsValidated(): static
     {
-        $this->testsValidated = $testsValidated;
+        $this->testsValidated = true;
 
         return $this;
     }
@@ -96,5 +97,15 @@ class Process
         $this->model = $model;
 
         return $this;
+    }
+
+    public function jsonSerialize(): array {
+        return [
+            "id" => $this->id->toString(),
+            "name" => $this->name,
+            "description" => $this->description,
+            "tests" => $this->tests,
+            "validated" => $this->testsValidated
+        ];
     }
 }

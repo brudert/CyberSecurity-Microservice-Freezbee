@@ -62,6 +62,7 @@ class CharacteristicController extends AbstractController {
             $res->setDescription($payload["description"]); 
         }
 
+        $entityManager->flush();
         return new JsonResponse($res, 200);
     }
 }

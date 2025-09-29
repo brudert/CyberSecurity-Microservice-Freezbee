@@ -15,6 +15,10 @@ class SeriesRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Series::class);
     }
+    public function findByID($value): Series
+    {
+        return $this->find($value);
+    }
 
 //    /**
 //     * @return Series[] Returns an array of Series objects
