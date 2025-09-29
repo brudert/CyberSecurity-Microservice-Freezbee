@@ -4,11 +4,12 @@ namespace App\Model\Entity;
 
 use App\Infrastructure\Repository\SeriesRepository;
 use Doctrine\ORM\Mapping as ORM;
+use JsonSerializable;
 use Symfony\Bridge\Doctrine\Types\UuidType;
 use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity(repositoryClass: SeriesRepository::class)]
-class Series
+class Series implements JsonSerializable
 {
     #[ORM\Id]
     #[ORM\Column(type: UuidType::NAME, unique: true)]
@@ -34,5 +35,12 @@ class Series
         $this->name = $name;
 
         return $this;
+    }
+
+    public function jsonSerialize(): array {
+        return [
+            "id" => $this->id->toString(),
+            "name" => $this->name,
+        ];
     }
 }

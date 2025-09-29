@@ -7,11 +7,12 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use JsonSerializable;
 use Symfony\Bridge\Doctrine\Types\UuidType;
 use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity(repositoryClass: ModelRepository::class)]
-class Model
+class Model implements JsonSerializable
 {
     #[ORM\Id]
     #[ORM\Column(type: UuidType::NAME, unique: true)]
@@ -28,6 +29,9 @@ class Model
     #[ORM\Column]
     private ?int $pUHT = null;
 
+    /**
+     * @var ?Series refers to the series, this is just bad creation on my part, sorry 
+     */
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
     private ?Series $ModelId = null;
@@ -161,5 +165,17 @@ class Model
         }
 
         return $this;
+    }
+
+    public function jsonSerialize(): array {
+        return [
+            "id" => $this->id->toString(),
+            "name" => $this->name,
+            "description" => $this->description,
+            "pUHT" => $this->pUHT,
+            "series" => $this->ModelId,
+            "processes" => $this->processes,
+            "ingredients" => $this->ingredientDosages,
+        ];
     }
 }

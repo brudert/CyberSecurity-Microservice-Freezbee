@@ -5,11 +5,12 @@ namespace App\Model\Entity;
 use App\Infrastructure\Repository\IngredientRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use JsonSerializable;
 use Symfony\Bridge\Doctrine\Types\UuidType;
 use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity(repositoryClass: IngredientRepository::class)]
-class Ingredient
+class Ingredient implements JsonSerializable
 {
     #[ORM\Id]
     #[ORM\Column(type: UuidType::NAME, unique: true)]
@@ -50,5 +51,14 @@ class Ingredient
         $this->description = $description;
 
         return $this;
+    }
+    
+
+    public function jsonSerialize(): array {
+        return [
+            "id" => $this->id->toString(),
+            "name" => $this->name,
+            "description" => $this->description
+        ];
     }
 }
