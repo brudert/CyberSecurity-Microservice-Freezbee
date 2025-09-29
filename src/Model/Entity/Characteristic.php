@@ -62,6 +62,7 @@ class Characteristic implements JsonSerializable
 
     public function jsonSerialize(): array {
         return [
+            "id" => $this->id->toString(),
             "name" => $this->name,
             "description" => $this->description
         ];

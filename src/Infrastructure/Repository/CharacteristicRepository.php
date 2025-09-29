@@ -17,17 +17,11 @@ class CharacteristicRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return Characteristic[] Returns an array of Characteristic objects
+     * @return Characteristic Returns an array of Characteristic objects
      */
-    public function findByID($value): array
+    public function findByID($value): Characteristic
     {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.id = :val')
-            ->setParameter('val', $value)
-            ->orderBy('c.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
+        return $this->find($value)
         ;
     }
 
