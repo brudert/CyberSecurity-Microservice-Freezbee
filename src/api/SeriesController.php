@@ -58,6 +58,7 @@ class SeriesController extends AbstractController {
             $res->setName($payload["name"]); 
         }
 
+        $entityManager->flush();
         return new JsonResponse($res, 200);
     }
 }

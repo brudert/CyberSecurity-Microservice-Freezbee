@@ -15,6 +15,10 @@ class ModelRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Model::class);
     }
+    public function findByID($value): Model
+    {
+        return $this->find($value);
+    }
 
 //    /**
 //     * @return Model[] Returns an array of Model objects

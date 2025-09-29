@@ -79,9 +79,9 @@ class Process
         return $this->testsValidated;
     }
 
-    public function setTestsValidated(bool $testsValidated): static
+    public function setTestsValidated(): static
     {
-        $this->testsValidated = $testsValidated;
+        $this->testsValidated = true;
 
         return $this;
     }

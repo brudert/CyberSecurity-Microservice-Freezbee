@@ -61,6 +61,7 @@ class IngredientController extends AbstractController {
         if(isset($payload["description"])){
             $res->setDescription($payload["description"]); 
         }
+        $entityManager->flush();
 
         return new JsonResponse($res, 200);
     }

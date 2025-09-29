@@ -1,0 +1,53 @@
+<?php
+
+namespace App\api;
+
+use App\Infrastructure\Repository\ProcessRepository;
+use App\Model\Entity\Process;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Uid\Uuid;
+
+class ProcessController extends AbstractController {
+
+    #[Route("/process/{processId}", methods: ["PUT"])]
+    public function modifyProcess(Request $request, EntityManagerInterface $entityManager, string $processId): Response {
+        /** @var ProcessRepository $processRepository  */
+        $processRepository = $entityManager->getRepository(Process::class);
+        $res = $processRepository->findById(new Uuid($processId));
+
+        $payload = json_decode($request->getContent(), true);
+        
+        if(isset($payload["name"])){
+            $res->setName($payload["name"]); 
+        }
+        if(isset($payload["description"])){
+            $res->setDescription($payload["description"]); 
+        }
+
+        if(isset($payload["tests"])){
+            $res->setTests($payload["tests"]); 
+        }
+        
+        $entityManager->flush();
+        
+        return new JsonResponse($res);
+    }
+
+    #[Route("/process/validate/{processId}", methods: ["PUT"])]
+    public function validateProcess(Request $request, EntityManagerInterface $entityManager, string $processId): Response {
+        /** @var ProcessRepository $processRepository  */
+        $processRepository = $entityManager->getRepository(Process::class);
+        $res = $processRepository->findById(new Uuid($processId));
+
+        $res->setTestsValidated();
+
+        $entityManager->flush();
+        
+        return new JsonResponse($res);
+    }
+}
