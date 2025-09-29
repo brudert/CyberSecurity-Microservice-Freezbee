@@ -26,15 +26,23 @@ class CharacteristicController extends AbstractController {
         }
 
         $new = new Characteristic();
-        $new->setName("hello");
-        $new->setDescription("world");
+        $new->setName($payload["name"]);
+        $new->setDescription($payload["description"]);
         try {
         $entityManager->persist($new);
         $entityManager->flush();
 
-        return new JsonResponse(json_encode("{\"result\": \"saved characteristic " . $new->getName() . "\"}"));
+        return new JsonResponse(array("result" => "saved characteristic " . $new->getName()));
         } catch (Exception $e) {
             return new JsonResponse(array("message" => $e->getMessage()), 400);
         }
+    }
+
+    #[Route('/api/characteristic', methods:["GET"])]
+    public function getCharacteristics(Request $request, EntityManagerInterface $entityManager): Response{
+        /** @var CharacteristicRepository $characteristicRepository  */
+        $characteristicRepository = $entityManager->getRepository(Characteristic::class);
+        $res = $characteristicRepository->findAll();
+        return new JsonResponse($res, 200);
     }
 }
