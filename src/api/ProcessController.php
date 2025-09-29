@@ -68,9 +68,31 @@ class ProcessController extends AbstractController {
         $res->setName($payload["name"]);
         $res->setDescription($payload["description"]); 
         $res->setTests($payload["tests"]); 
+
+        $entityManager->persist($res);
         
         $entityManager->flush();
         
+        return new JsonResponse($res);
+    }
+
+    #[Route("/process/{processId}", methods: ["DELETE"])]
+    public function deleteProcess(Request $request, EntityManagerInterface $entityManager, string $processId): Response {
+        
+        $processRepository = $entityManager->getRepository(Process::class);
+        $res = $processRepository->findById(new Uuid($processId));
+
+        $entityManager->remove($res);
+
+        return new JsonResponse($res);
+    }
+
+    #[Route("/process/{processId}", methods: ["get"])]
+    public function getProcess(Request $request, EntityManagerInterface $entityManager, string $processId): Response {
+        
+        $processRepository = $entityManager->getRepository(Process::class);
+        $res = $processRepository->findById(new Uuid($processId));
+
         return new JsonResponse($res);
     }
 }
