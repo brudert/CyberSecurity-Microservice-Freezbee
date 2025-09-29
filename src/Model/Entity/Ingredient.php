@@ -51,11 +51,4 @@ class Ingredient
 
         return $this;
     }
-
-    public function __construct(string $name, string $desc)
-    {
-        $this->name = $name;
-        $this->description = $desc;
-        $this->id = UUID::v7();
-    }
 }
