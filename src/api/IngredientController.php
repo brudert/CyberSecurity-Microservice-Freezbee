@@ -65,4 +65,5 @@ class IngredientController extends AbstractController {
 
         return new JsonResponse($res, 200);
     }
+  
 }

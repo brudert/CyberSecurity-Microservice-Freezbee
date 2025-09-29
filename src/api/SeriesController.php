@@ -1,7 +1,6 @@
 <?php
 
 namespace App\api;
-
 use App\Infrastructure\Repository\SeriesRepository;
 use App\Model\Entity\Series;
 use Doctrine\ORM\EntityManagerInterface;
