@@ -5,6 +5,7 @@ namespace App\Model\Entity;
 use App\Infrastructure\Repository\CharacteristicRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use JsonSerializable;
 use Symfony\Bridge\Doctrine\Types\UuidType;
 use Symfony\Component\Uid\Uuid;
 
@@ -51,4 +52,12 @@ class Characteristic
 
         return $this;
     }
+
+    // public function __construct(Uuid $UUID, string $name, string $desc)
+    // {
+    //     $this->id = $UUID;
+    //     $this->name = $name;
+    //     $this->description = $desc;
+    // }
+
 }
