@@ -91,14 +91,14 @@ class Model
         return $this;
     }
 
-    public function getModelId(): ?Series
+    public function getSeries(): ?Series
     {
         return $this->ModelId;
     }
 
-    public function setModelId(?Series $ModelId): static
+    public function setSeries(?Series $series): static
     {
-        $this->ModelId = $ModelId;
+        $this->ModelId = $series;
 
         return $this;
     }
