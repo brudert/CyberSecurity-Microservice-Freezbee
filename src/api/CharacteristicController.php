@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Uid\UuidV8;
 
 use function PHPUnit\Framework\isNull;
@@ -43,6 +44,25 @@ class CharacteristicController extends AbstractController {
         /** @var CharacteristicRepository $characteristicRepository  */
         $characteristicRepository = $entityManager->getRepository(Characteristic::class);
         $res = $characteristicRepository->findAll();
+        return new JsonResponse($res, 200);
+    }
+
+    #[Route('/api/characteristic/{characteristicId}', methods:["PUT"])]
+    public function modifyCharacteristics(Request $request, EntityManagerInterface $entityManager, string $characteristicId): Response{
+        /** @var CharacteristicRepository $characteristicRepository  */
+        $characteristicRepository = $entityManager->getRepository(Characteristic::class);
+        $res = $characteristicRepository->findByID(new Uuid($characteristicId));
+
+        
+        $payload = json_decode($request->getContent(), true);
+
+        if(isset($payload["name"])){
+            $res->setName($payload["name"]); 
+        }
+        if(isset($payload["description"])){
+            $res->setDescription($payload["description"]); 
+        }
+
         return new JsonResponse($res, 200);
     }
 }
