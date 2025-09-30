@@ -10,6 +10,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use App\Model\Entity\Model;
 use App\Model\Entity\Series;
 use App\Model\Entity\Dosage;
+use App\Model\Entity\Ingredient;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 class ModelController extends AbstractController 
@@ -34,8 +35,8 @@ class ModelController extends AbstractController
         {
             $dosage = new Dosage();
             $dosage->setModel($model);
-           
-            $dosage->setIngredient($ingredient['ingredient']);
+            $ing = $entityManager->getRepository(Ingredient::class)->find($ingredient['ingredient']);
+            $dosage->setIngredient($ing);
             $dosage->setGrams($ingredient['grams']);
             $entityManager->persist($dosage);
 
