@@ -2,6 +2,7 @@
 
 namespace App\api;
 
+use App\Model\Entity\Characteristic;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -30,6 +31,8 @@ class ModelController extends AbstractController
         $model->setSeries($serie);
         $entityManager->persist($model);
         $ingredients = $payload['ingredients']; // array of jsons
+        $characteristics = $payload['characteristics']; // array of jsons
+
 
         foreach($ingredients as $ingredient)
         {
@@ -42,11 +45,19 @@ class ModelController extends AbstractController
 
         }
 
+
+        foreach($characteristics as $characteristic_id)
+        {
+            $char = $entityManager->getRepository(Characteristic::class)->find($characteristic_id);
+            $model->addCharacteristics($char);
+
+        }
+
         // actually execute the query
         $entityManager->flush();
 
-        // optional 
-        return new Response('Saved new product with id '.$model->getId());
+        
+        return new JsonResponse($model);
     }
     #[Route('/api/model/{model_id}', name: 'get_model', methods:['GET'])]
     public function getModel($model_id, EntityManagerInterface $entityManager) : JsonResponse
@@ -69,35 +80,46 @@ class ModelController extends AbstractController
             $model->setName($payload['name']);
             $entityManager->persist($model);
         }
-        elseif (isset($payload['description']))
+        if (isset($payload['description']))
         {
             $model->setDescription($payload['description']);
             $entityManager->persist($model);
         }
-        elseif (isset($payload['pUHT']))
+        if (isset($payload['pUHT']))
         {
             $model->setPUHT($payload['pUHT']);
             $entityManager->persist($model);
         }
-        elseif (isset($payload['serie_id']))
+        if (isset($payload['serie_id']))
         {
             $serie = $entityManager->getRepository(Series::class)->find($payload['series_id']);
             $model->setSeries($serie);
             $entityManager->persist($model);
 
         }
-        elseif (isset($payload['ingredients']))
+        if (isset($payload['ingredients']))
         {
-            $ingredients = $payload['ingredients'];
 
-            foreach($ingredients as $ingredient)
+        $model->resetIngredientDosages();
+
+        foreach($payload['ingredients'] as $ingredient)
         {
             $dosage = new Dosage();
             $dosage->setModel($model);
-           
-            $dosage->setIngredient($ingredient['ingredient_id']);
-            $dosage->setGrams($ingredient['dosage']);
+            $ing = $entityManager->getRepository(Ingredient::class)->find($ingredient['ingredient']);
+            $dosage->setIngredient($ing);
+            $dosage->setGrams($ingredient['grams']);
             $entityManager->persist($dosage);
+
+        }
+        }
+        if (isset($payload['characteristics'])){
+        $model->resetCharacteristics();
+
+        foreach($payload['characteristics'] as $characteristic_id)
+        {
+            $char = $entityManager->getRepository(Characteristic::class)->find($characteristic_id);
+            $model->addCharacteristics($char);
 
         }
 
@@ -115,7 +137,7 @@ class ModelController extends AbstractController
         $model = $entityManager->getRepository(Model::class)->find($model_id);
         $entityManager->remove($model);
         $entityManager->flush();
-        return new Response('Model deleted successfylly !! ');
+        return new Response();
     }
 
     #[Route('/api/models', name: 'get_models', methods: ['GET'])]

@@ -48,6 +48,12 @@ class Model implements JsonSerializable
     #[ORM\OneToMany(targetEntity: Dosage::class, mappedBy: 'model', orphanRemoval: true)]
     private Collection $ingredientDosages;
 
+    /**
+     * @var Collection<int, Dosage>
+     */
+    #[ORM\ManyToMany(targetEntity: Characteristic::class, orphanRemoval: false)]
+    private Collection $characteristics;
+
     public function __construct()
     {
         $this->processes = new ArrayCollection();
@@ -145,6 +151,11 @@ class Model implements JsonSerializable
         return $this->ingredientDosages;
     }
 
+    public function resetIngredientDosages(): void
+    {
+        $this->ingredientDosages = new ArrayCollection();
+    }
+
     public function addIngredientDosage(Dosage $ingredientDosage): static
     {
         if (!$this->ingredientDosages->contains($ingredientDosage)) {
@@ -162,6 +173,28 @@ class Model implements JsonSerializable
             if ($ingredientDosage->getModel() === $this) {
                 $ingredientDosage->setModel(null);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Dosage>
+     */
+    public function getCharacteristics(): Collection
+    {
+        return $this->characteristics;
+    }
+
+    public function resetCharacteristics(): void
+    {
+        $this->characteristics = new ArrayCollection();
+    }
+
+    public function addCharacteristics(Characteristic $characteristic): static
+    {
+        if (!$this->characteristics->contains($characteristic)) {
+            $this->characteristics->add($characteristic);
         }
 
         return $this;
