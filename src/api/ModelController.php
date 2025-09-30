@@ -10,6 +10,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use App\Model\Entity\Model;
 use App\Model\Entity\Series;
 use App\Model\Entity\Dosage;
+use App\Model\Entity\Ingredient;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 class ModelController extends AbstractController 
@@ -20,22 +21,22 @@ class ModelController extends AbstractController
         $payload = json_decode($request->getContent(), True);
 
 
-        $serie = $entityManager->getRepository(Series::class)->find($payload['serie_id']);
+        $serie = $entityManager->getRepository(Series::class)->find($payload['series_id']);
 
         $model = new Model();
-        $model->setName($payload['model_name']);
-        $model->setDescription($payload['model_description']);
-        $model->setPUHT($payload['model_PUHT']);
+        $model->setName($payload['name']);
+        $model->setDescription($payload['description']);
+        $model->setPUHT($payload['pUHT']);
         $model->setSeries($serie);
         $entityManager->persist($model);
-        $ingredients = $payload['ingredients_grams']; // array of jsons
+        $ingredients = $payload['ingredients']; // array of jsons
 
         foreach($ingredients as $ingredient)
         {
             $dosage = new Dosage();
             $dosage->setModel($model);
-           
-            $dosage->setIngredient($ingredient['ingredient']);
+            $ing = $entityManager->getRepository(Ingredient::class)->find($ingredient['ingredient']);
+            $dosage->setIngredient($ing);
             $dosage->setGrams($ingredient['grams']);
             $entityManager->persist($dosage);
 
@@ -63,46 +64,48 @@ class ModelController extends AbstractController
             );
         }
         $payload = json_decode($request->getContent(), True);
-        if (isset($payload['model_name']))
+        if (isset($payload['name']))
         {
-            $model->setName($payload['model_name']);
+            $model->setName($payload['name']);
             $entityManager->persist($model);
         }
-        elseif (isset($payload['model_description']))
+        elseif (isset($payload['description']))
         {
-            $model->setDescription($payload['model_description']);
+            $model->setDescription($payload['description']);
             $entityManager->persist($model);
         }
-        elseif (isset($payload['model_PUHT']))
+        elseif (isset($payload['pUHT']))
         {
-            $model->setPUHT($payload['model_PUHT']);
+            $model->setPUHT($payload['pUHT']);
             $entityManager->persist($model);
         }
         elseif (isset($payload['serie_id']))
         {
-            $serie = $entityManager->getRepository(Series::class)->find($payload['serie_id']);
+            $serie = $entityManager->getRepository(Series::class)->find($payload['series_id']);
             $model->setSeries($serie);
             $entityManager->persist($model);
 
         }
-        elseif (isset($payload['ingredients_grams']))
+        elseif (isset($payload['ingredients']))
         {
-            $ingredients = $payload['ingredients_grams'];
+            $ingredients = $payload['ingredients'];
 
             foreach($ingredients as $ingredient)
         {
             $dosage = new Dosage();
             $dosage->setModel($model);
            
-            $dosage->setIngredient($ingredient['ingredient']);
-            $dosage->setGrams($ingredient['grams']);
+            $dosage->setIngredient($ingredient['ingredient_id']);
+            $dosage->setGrams($ingredient['dosage']);
             $entityManager->persist($dosage);
 
         }
 
         }
         $entityManager->flush();
-        return new Response('Model updated successfully ! ');
+        
+        $model = $entityManager->getRepository(Model::class)->find($model_id);
+        return new Response($model);
 
 
     }
